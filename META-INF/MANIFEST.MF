@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EjercicioFinal
+Bundle-SymbolicName: EjercicioFinal
+Bundle-Version: 1.0.0.qualifier
+Export-Package: Containers,
+ Exceptions,
+ Models,
+ UI
