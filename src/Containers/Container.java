@@ -1,5 +1,7 @@
 package Containers;
 
+import java.util.regex.Pattern;
+
 import Models.Cola;
 import Models.Trayecto;
 
@@ -15,5 +17,6 @@ public class Container {
 	public static boolean esDiaFestivo = false;
 
 	public static Trayecto trayectoActivo;
+	public final static Pattern REGEX_EUR = Pattern.compile("^[0-9]{1,3}[.]{0,1}[0-9]{0,3}$");
 
 }

@@ -23,7 +23,7 @@ public class Tiempo {
 			int diaDeSemana = Container.trayectoActivo.getDInicio().getDayOfWeek();
 			float precioFinal = 0.0f;
 			if (segundos >= 59) {
-				segundos = 0;
+				segundos = -1;
 				minutos++;
 			}
 			if (minutos >= 59) {
@@ -44,7 +44,8 @@ public class Tiempo {
 			segundos++;
 			Container.trayectoActivo.setFlPrecioTotal(precioFinal);
 			txtDineroPagado.setText(String.valueOf(precioFinal) + " Eur");
-			lblTiempo.setText(String.valueOf(horas) + ":" + String.valueOf(minutos) + ":" + String.valueOf(segundos));
+			lblTiempo.setText(String.format("%02d", horas) + ":" + String.format("%02d", minutos) + ":"
+					+ String.format("%02d", segundos));
 		}
 	}
 

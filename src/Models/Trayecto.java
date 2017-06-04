@@ -82,4 +82,11 @@ public class Trayecto {
 		DInicio = dInicio;
 	}
 
+	@Override
+	public String toString() {
+		return "Trayecto [TInicioTrayecto=" + TInicioTrayecto + ", TFinTrayecto=" + TFinTrayecto + ", DInicio="
+				+ DInicio + ", bolSuplementoNoche=" + bolSuplementoNoche + ", bolSuplementoAeropuerto="
+				+ bolSuplementoAeropuerto + ", bolFestivo=" + bolFestivo + ", flPrecioTotal=" + flPrecioTotal + "]\n";
+	}
+
 }

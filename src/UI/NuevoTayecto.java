@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
@@ -25,6 +26,8 @@ import Models.*;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -103,13 +106,16 @@ public class NuevoTayecto {
 		tglbtnAeropuerto = new JToggleButton("Aeropuerto");
 
 		btnCalcularPrecio = new JButton("Calcular Precio");
+
 		lblDiaActual = new JLabel("Dia Actual");
 		panelPrecio = new JPanel();
 		txtPreciototal = new JTextField();
 		lblPreciototal = new JLabel("PrecioTotal");
 		txtDineropagado = new JTextField();
+
 		lblDineropagado = new JLabel("DineroPagado");
 		btnPagado = new JButton("Pagado");
+
 		btnSeleccionarSuplementos = new JButton("Seleccionar Suplementos");
 
 		lblContador = new JLabel("Contador");
@@ -174,9 +180,78 @@ public class NuevoTayecto {
 		tglbtnNoche.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if()
+				if (tglbtnNoche.isEnabled()) {
+					if (Container.trayectoActivo.isBolSuplementoNoche()) {
+						Container.trayectoActivo.setFlPrecioTotal(Container.trayectoActivo.getFlPrecioTotal() - 2.0f);
+					} else {
+						Container.trayectoActivo.setFlPrecioTotal(Container.trayectoActivo.getFlPrecioTotal() + 2.0f);
+					}
+					txtPreciototal.setText(String
+							.valueOf((float) Math.floor(Container.trayectoActivo.getFlPrecioTotal() * 100) / 100));
+					Container.trayectoActivo.setBolSuplementoNoche(!Container.trayectoActivo.isBolSuplementoNoche());
+				}
 			}
 		});
+
+		btnCalcularPrecio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (btnCalcularPrecio.isEnabled()) {
+					enabledSuplementos(false);
+					enabledPrecio(true);
+				}
+			}
+		});
+
+		btnSeleccionarSuplementos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (btnSeleccionarSuplementos.isEnabled()) {
+					enabledSuplementos(true);
+					enabledPrecio(false);
+				}
+			}
+		});
+
+		btnPagado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (btnPagado.isEnabled()) {
+					if (Container.REGEX_EUR.matcher(txtDineropagado.getText()).matches()) {
+						String strAux = "";
+						float total = Container.trayectoActivo.getFlPrecioTotal();
+						float pagado = Float.parseFloat(txtDineropagado.getText());
+						if (pagado >= total) {
+							strAux += "El importe total es:\t" + String.valueOf(total) + " Eur\n";
+							strAux += "El cliente le ha dado:\t" + String.valueOf(pagado) + " Eur\n";
+							strAux += "El cambio es:\t\t"
+									+ String.valueOf(Math.floor(((pagado - total) + 0.01f) * 100) / 100) + "Eur\n";
+							strAux += "¿Es todo correcto?";
+							if (JOptionPane.showConfirmDialog(frame, strAux, null,
+									JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+								Container.listaTrayectos.add(Container.trayectoActivo);
+								Container.trayectoActivo = null;
+								new PantallaPrincipal().getFrame().setVisible(true);
+								frame.dispose();
+							}
+						} else {
+							JOptionPane.showMessageDialog(frame,
+									"No ha introducido dinero suficiente para pagar el trayecto.");
+						}
+					} else {
+						JOptionPane.showMessageDialog(frame, "No ha introducido un importe valido.");
+					}
+				}
+			}
+		});
+
+		txtDineropagado.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char caracter = e.getKeyChar();
+				if (((caracter < '0') || (caracter > '9')) && caracter != (char) 46 && (caracter != '\b')) {
+					e.consume();
+				}
+			}
+		});
+
 	}
 
 	private void setComponetProperties() {
@@ -257,7 +332,7 @@ public class NuevoTayecto {
 		lblPreciototal.setBounds(200, 41, 110, 16);
 		panelPrecio.add(lblPreciototal);
 
-		txtDineropagado.setText("DineroPagado");
+		txtDineropagado.setText("");
 		txtDineropagado.setBounds(12, 103, 176, 58);
 		panelPrecio.add(txtDineropagado);
 		txtDineropagado.setColumns(10);

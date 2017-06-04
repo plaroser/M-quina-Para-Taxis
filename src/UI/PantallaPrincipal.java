@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
+import org.joda.time.DateTime;
+
 import Containers.Container;
 
 import java.awt.event.ActionListener;
@@ -52,8 +54,9 @@ public class PantallaPrincipal {
 
 		btnCajaDelDia = new JButton("Caja del Dia");
 
-		tglbtnEsfestivo = new JToggleButton("Hoy es festivo");
+		tglbtnEsfestivo = new JToggleButton("Hoy es Sabado, Domingo o festivo");
 
+		System.out.println(Container.listaTrayectos);
 		setComponetProperties();
 		setComponentAdapters();
 	}
@@ -77,7 +80,16 @@ public class PantallaPrincipal {
 		frame.getContentPane().add(btnCajaDelDia);
 
 		tglbtnEsfestivo.setBounds(12, 260, 520, 121);
+		tglbtnEsfestivo.setSelected(new DateTime().getDayOfWeek() >= 6);
 		frame.getContentPane().add(tglbtnEsfestivo);
 
+	}
+
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(JFrame frame) {
+		this.frame = frame;
 	}
 }
